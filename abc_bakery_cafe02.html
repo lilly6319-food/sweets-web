@@ -1,14 +1,17 @@
 <!DOCTYPE html>
-<html lang="zh-TW">
+<html lang="zh-TW" class="scroll-smooth">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ABC Bakery & Cafe | 美式復古烘焙・純粹手作</title>
+  <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,800;1,400&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;0,900;1,400&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
 
   <script>
     tailwind.config = {
@@ -20,7 +23,8 @@
             cream: '#FAF7F2',
             barn: '#2B2625',
             wood: '#5C4033',
-            'industrial-gray': '#4A4A4A'
+            'industrial-gray': '#4A4A4A',
+            warm: '#F4ECE1'
           },
           fontFamily: {
             serif: ['"Playfair Display"', 'serif'],
@@ -37,30 +41,44 @@
       font-family: 'Noto Sans TC', sans-serif;
     }
     .hero-bg {
-      background-image: linear-gradient(rgba(20, 16, 15, 0.55), rgba(20, 16, 15, 0.7)), url('https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=1920&q=80');
+      background-image: linear-gradient(rgba(26, 20, 18, 0.65), rgba(26, 20, 18, 0.75)), url('https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=1920&q=80');
       background-size: cover;
       background-position: center;
       background-attachment: fixed;
     }
+    /* 隱藏滾動條 */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
   </style>
 </head>
-<body class="relative min-h-screen">
+<body class="relative min-h-screen text-stone-800 antialiased selection:bg-brick selection:text-white">
+
+  <!-- 頂部公告列 -->
+  <div class="bg-barn text-amber-100 text-xs py-2 px-4 text-center tracking-wider">
+    <span>🌾 慶祝春季新品上市！全館滿 NT$ 1,500 即享黑貓低溫免運費・門市每日新鮮現烤出爐</span>
+  </div>
 
   <!-- 導覽列 -->
-  <header class="sticky top-0 z-40 bg-[#FAF7F2]/95 backdrop-blur border-b border-stone-200">
+  <header class="sticky top-0 z-40 bg-[#FAF7F2]/95 backdrop-blur-md border-b border-stone-200 shadow-sm transition-all duration-300">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-      <a href="#" class="flex items-center gap-3">
-        <div class="w-10 h-10 rounded-full bg-brick text-white flex items-center justify-center font-serif text-xl font-bold shadow">
+      <a href="#" class="flex items-center gap-3 group">
+        <div class="w-11 h-11 rounded-full bg-brick text-white flex items-center justify-center font-serif text-2xl font-bold shadow transition group-hover:scale-105">
           A
         </div>
         <div>
-          <span class="block font-serif text-xl font-bold tracking-wider text-barn">ABC Bakery & Cafe</span>
-          <span class="block text-[10px] tracking-widest text-brick uppercase -mt-1 font-medium">Est. Apr 2016</span>
+          <span class="block font-serif text-xl sm:text-2xl font-bold tracking-wider text-barn group-hover:text-brick transition">ABC Bakery & Cafe</span>
+          <span class="block text-[10px] tracking-widest text-brick uppercase -mt-0.5 font-semibold">Est. Apr 2016</span>
         </div>
       </a>
 
-      <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-stone-700">
+      <nav class="hidden lg:flex items-center gap-8 text-sm font-medium text-stone-700">
         <a href="#about" class="hover:text-brick transition">關於我們</a>
+        <a href="#features" class="hover:text-brick transition">在地食材</a>
         <a href="#menu" class="hover:text-brick transition">特選菜單</a>
         <a href="#shop" class="hover:text-brick transition">線上預購</a>
         <a href="#catering" class="hover:text-brick transition">外燴與場租</a>
@@ -68,112 +86,603 @@
       </nav>
 
       <div class="flex items-center gap-4">
-        <a href="#shop" class="bg-brick hover:bg-brick-dark text-white px-4 py-2 rounded-lg text-sm font-medium shadow-sm transition">
-          立即點餐
+        <!-- 購物車按鈕 -->
+        <button onclick="toggleCart()" class="relative p-2.5 rounded-full bg-white border border-stone-200 text-barn hover:text-brick shadow-sm transition">
+          <i class="fa-solid fa-bag-shopping text-lg"></i>
+          <span id="cartCount" class="absolute -top-1 -right-1 bg-brick text-white text-[11px] font-bold w-5 h-5 rounded-full flex items-center justify-center shadow">0</span>
+        </button>
+
+        <a href="#shop" class="hidden sm:inline-flex bg-brick hover:bg-brick-dark text-white px-5 py-2.5 rounded-lg text-sm font-medium shadow-sm transition">
+          線上訂購
         </a>
+
+        <!-- 手機漢堡選單 -->
+        <button onclick="toggleMobileMenu()" class="lg:hidden p-2 text-stone-700 hover:text-brick">
+          <i class="fa-solid fa-bars text-xl"></i>
+        </button>
       </div>
+    </div>
+
+    <!-- 手機選單抽屜 -->
+    <div id="mobileMenu" class="hidden lg:hidden bg-[#FAF7F2] border-b border-stone-200 px-6 py-4 space-y-3 text-sm font-medium text-stone-700">
+      <a href="#about" onclick="toggleMobileMenu()" class="block py-1 hover:text-brick">關於我們</a>
+      <a href="#features" onclick="toggleMobileMenu()" class="block py-1 hover:text-brick">在地食材</a>
+      <a href="#menu" onclick="toggleMobileMenu()" class="block py-1 hover:text-brick">特選菜單</a>
+      <a href="#shop" onclick="toggleMobileMenu()" class="block py-1 hover:text-brick">線上預購</a>
+      <a href="#catering" onclick="toggleMobileMenu()" class="block py-1 hover:text-brick">外燴與場租</a>
+      <a href="#store" onclick="toggleMobileMenu()" class="block py-1 hover:text-brick">門市資訊</a>
     </div>
   </header>
 
   <!-- Hero 區塊 -->
-  <section class="hero-bg text-white py-32 px-4 sm:px-6 lg:px-8 text-center flex items-center justify-center min-h-[70vh]">
+  <section class="hero-bg text-white py-32 px-4 sm:px-6 lg:px-8 text-center flex items-center justify-center min-h-[75vh]">
     <div class="max-w-3xl mx-auto">
-      <span class="inline-block py-1 px-4 bg-brick/80 rounded-full text-xs font-semibold tracking-widest uppercase mb-4">美式穀倉風格甜點店</span>
-      <h1 class="font-serif text-4xl sm:text-6xl font-bold tracking-wide mb-6">美式經典，在地純粹</h1>
-      <p class="text-stone-200 text-base sm:text-lg leading-relaxed mb-8 font-light">
-        自 2016 年春天，我們以大片陽光、斑駁老紅磚與原木桌椅，重現記憶裡道地美式烘焙。結合台灣在地有機蔬果與鮮乳，為您獻上溫暖的手作香氣。
+      <span class="inline-block py-1.5 px-4 bg-brick/90 backdrop-blur rounded-full text-xs font-semibold tracking-widest uppercase mb-6 shadow-sm">
+        ESTABLISHED APRIL 2016・美式復古穀倉甜點
+      </span>
+      <h1 class="font-serif text-4xl sm:text-6xl lg:text-7xl font-bold tracking-wide mb-6 leading-tight">
+        美式經典，在地純粹
+      </h1>
+      <p class="text-stone-200 text-base sm:text-lg leading-relaxed mb-10 font-light max-w-2xl mx-auto">
+        以大片明亮陽光、斑駁老紅磚與原木鐵件，重溫西海岸手作烘焙的濃郁香氣。<br class="hidden sm:inline">
+        嚴選台灣當季水果與在地小農鮮乳，揉入一份純粹真實的溫暖甜意。
       </p>
       <div class="flex flex-wrap justify-center gap-4">
-        <a href="#shop" class="bg-brick hover:bg-brick-dark text-white px-8 py-3.5 rounded-lg text-base font-medium shadow transition">線上訂購手作甜點</a>
-        <a href="#menu" class="bg-white/10 hover:bg-white/20 border border-white/30 text-white px-8 py-3.5 rounded-lg text-base font-medium backdrop-blur transition">瀏覽店內菜單</a>
+        <a href="#shop" class="bg-brick hover:bg-brick-dark text-white px-8 py-3.5 rounded-lg text-base font-medium shadow-lg transition">
+          <i class="fa-solid fa-basket-shopping mr-2"></i>線上預購手作
+        </a>
+        <a href="#menu" class="bg-white/10 hover:bg-white/20 border border-white/40 text-white px-8 py-3.5 rounded-lg text-base font-medium backdrop-blur transition">
+          瀏覽店內菜單
+        </a>
       </div>
     </div>
   </section>
 
-  <!-- 嚴選餐點 / 菜單區塊 -->
-  <section id="menu" class="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="text-center max-w-2xl mx-auto mb-16">
-      <span class="text-brick font-serif font-bold text-sm tracking-widest uppercase">Our Signature</span>
-      <h2 class="font-serif text-3xl sm:text-4xl font-bold text-barn mt-1">經典招牌甜點</h2>
-      <div class="w-12 h-1 bg-brick mx-auto mt-4 rounded-full"></div>
+  <!-- 三大特色 / 小農食材承諾 -->
+  <section id="features" class="py-20 bg-warm border-y border-stone-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-2xl mx-auto mb-16">
+        <span class="text-brick font-serif font-bold text-sm tracking-widest uppercase">Our Philosophy</span>
+        <h2 class="font-serif text-3xl sm:text-4xl font-bold text-barn mt-1">堅持，只為端上一口好純粹</h2>
+        <div class="w-12 h-1 bg-brick mx-auto mt-4 rounded-full"></div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="bg-white p-8 rounded-2xl shadow-sm border border-stone-200 hover:shadow-md transition">
+          <div class="w-14 h-14 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center text-2xl mb-6">
+            <i class="fa-solid fa-lemon"></i>
+          </div>
+          <h3 class="font-serif text-xl font-bold text-barn mb-3">當季嚴選新鮮水果</h3>
+          <p class="text-stone-600 text-sm leading-relaxed">
+            從台南有機芒果、大湖草莓到屏東檸檬，不使用現成水果糖漿，堅持每天以新鮮當季水果手熬果醬與切片點綴。
+          </p>
+        </div>
+
+        <div class="bg-white p-8 rounded-2xl shadow-sm border border-stone-200 hover:shadow-md transition">
+          <div class="w-14 h-14 rounded-xl bg-red-50 text-brick flex items-center justify-center text-2xl mb-6">
+            <i class="fa-solid fa-cow"></i>
+          </div>
+          <h3 class="font-serif text-xl font-bold text-barn mb-3">在地小農無調整鮮乳</h3>
+          <p class="text-stone-600 text-sm leading-relaxed">
+            與在地牧場合作直送，無成分調整的純濃鮮乳與發酵奶油，保留最自然的乳脂醇厚，讓每口蛋糕散發乾淨奶香。
+          </p>
+        </div>
+
+        <div class="bg-white p-8 rounded-2xl shadow-sm border border-stone-200 hover:shadow-md transition">
+          <div class="w-14 h-14 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-2xl mb-6">
+            <i class="fa-solid fa-seedling"></i>
+          </div>
+          <h3 class="font-serif text-xl font-bold text-barn mb-3">友善有機蔬菜輕食</h3>
+          <p class="text-stone-600 text-sm leading-relaxed">
+            店內早午餐與鹹派搭配之生菜沙拉，全數選用有機認證契作農場，水洗即食、生脆甜潤，吃得安心無負擔。
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 關於我們區塊 -->
+  <section id="about" class="py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+      <div class="relative">
+        <div class="rounded-2xl overflow-hidden shadow-xl border-4 border-white">
+          <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=1000&q=80" alt="美式復古紅磚與木質空間" class="w-full h-[450px] object-cover">
+        </div>
+        <div class="absolute -bottom-8 -right-6 bg-barn text-white p-6 rounded-2xl shadow-xl max-w-xs hidden sm:block border border-stone-700">
+          <p class="font-serif text-2xl font-bold text-amber-100 mb-1">2016 年 4 月</p>
+          <p class="text-xs text-stone-300 leading-relaxed">從一爐烤箱開始，跨越太平洋把故鄉家庭廚房的甜蜜記憶帶到台灣。</p>
+        </div>
+      </div>
+
+      <div>
+        <span class="text-brick font-serif font-bold text-sm tracking-widest uppercase">Our Story</span>
+        <h2 class="font-serif text-3xl sm:text-4xl font-bold text-barn mt-1 mb-6 leading-snug">
+          因為想念故鄉的味道，<br>我們在台北點亮一盞穀倉暖燈
+        </h2>
+        <div class="space-y-4 text-stone-600 text-sm sm:text-base leading-relaxed">
+          <p>
+            創辦人自幼在美國西海岸成長，記憶中的家總飄散著肉桂烤捲與蘋果派的濃郁甜香。來到台灣結婚生子後，雖深深愛上這座溫暖島嶼，心底卻始終難忘故鄉那份純粹紮實的美式家常烘焙。
+          </p>
+          <p>
+            2016 年 4 月，ABC Bakery & Cafe 正式誕生。我們將空間打造成美式復古穀倉風格：挑高開闊的落地大窗灑進自然光線，略帶斑駁的白牆、老紅磚牆，搭配質樸木桌、老鐵椅與藤編，營造乾淨明亮又富有生活溫度的用餐角落。
+          </p>
+          <p class="font-medium text-stone-800">
+            每一道甜點，都堅持融合美式豪邁手作靈魂與台灣在地小農心血，不添加化學香精，期待每次走進來都能帶給您家的歸屬感。
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 特選菜單區塊 -->
+  <section id="menu" class="py-20 bg-stone-100 border-t border-stone-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-2xl mx-auto mb-16">
+        <span class="text-brick font-serif font-bold text-sm tracking-widest uppercase">Our Signature</span>
+        <h2 class="font-serif text-3xl sm:text-4xl font-bold text-barn mt-1">經典招牌甜點與輕食</h2>
+        <div class="w-12 h-1 bg-brick mx-auto mt-4 rounded-full"></div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        
+        <!-- 1. 美式老奶奶手工肉桂捲 (使用使用者 GitHub 圖片) -->
+        <div class="bg-white rounded-2xl overflow-hidden shadow-sm border border-stone-200 hover:shadow-md transition">
+          <div class="h-64 overflow-hidden relative">
+            <img src="https://lilly6319-food.github.io/sweets-web/cinnamon-roll.jpg.jpg" 
+                 alt="美式老奶奶手工肉桂捲" 
+                 class="w-full h-full object-cover transform hover:scale-105 transition duration-500">
+            <span class="absolute top-4 left-4 bg-brick text-white text-xs px-3 py-1 rounded-full font-medium shadow">人氣 No.1</span>
+          </div>
+          <div class="p-6">
+            <div class="flex justify-between items-baseline mb-2">
+              <h3 class="font-serif text-xl font-bold text-barn">美式老奶奶手工肉桂捲</h3>
+              <span class="text-brick font-bold text-lg">NT$ 120</span>
+            </div>
+            <p class="text-stone-500 text-sm leading-relaxed mb-4">
+              重現加州傳統配方，手工多層揉入香濃錫蘭肉桂粉與黑糖，出爐後淋上厚厚一層酸甜手打奶油乳酪霜，外酥內軟。
+            </p>
+            <div class="flex items-center gap-2 text-xs text-stone-400">
+              <i class="fa-solid fa-wheat-awn text-brick"></i>
+              <span>每日新鮮出爐・常溫或回烤皆宜</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. 台南有機芒果美式戚風 (正確金黃芒果切塊蛋糕) -->
+        <div class="bg-white rounded-2xl overflow-hidden shadow-sm border border-stone-200 hover:shadow-md transition">
+          <div class="h-64 overflow-hidden relative">
+            <img src="https://images.unsplash.com/photo-1565958011703-44f9829ba187?auto=format&fit=crop&w=800&q=80" 
+                 alt="台南有機芒果美式戚風" 
+                 class="w-full h-full object-cover transform hover:scale-105 transition duration-500">
+            <span class="absolute top-4 left-4 bg-amber-600 text-white text-xs px-3 py-1 rounded-full font-medium shadow">夏季限定</span>
+          </div>
+          <div class="p-6">
+            <div class="flex justify-between items-baseline mb-2">
+              <h3 class="font-serif text-xl font-bold text-barn">台南有機芒果美式戚風</h3>
+              <span class="text-brick font-bold text-lg">NT$ 180</span>
+            </div>
+            <p class="text-stone-500 text-sm leading-relaxed mb-4">
+              特選台南玉井在地自然熟成有機愛文芒果，搭配蓬鬆濕潤香草戚風蛋糕胚與小農無調整牧場動物性鮮奶油，清爽果香甜而不膩。
+            </p>
+            <div class="flex items-center gap-2 text-xs text-stone-400">
+              <i class="fa-solid fa-lemon text-amber-500"></i>
+              <span>在地小農契作有機芒果合作</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. 經典美式南方胡桃派 (修復有效圖片) -->
+        <div class="bg-white rounded-2xl overflow-hidden shadow-sm border border-stone-200 hover:shadow-md transition">
+          <div class="h-64 overflow-hidden relative">
+            <img src="https://images.unsplash.com/photo-1621303837174-89787a7d4729?auto=format&fit=crop&w=800&q=80" 
+                 alt="經典美式南方胡桃派" 
+                 class="w-full h-full object-cover transform hover:scale-105 transition duration-500">
+          </div>
+          <div class="p-6">
+            <div class="flex justify-between items-baseline mb-2">
+              <h3 class="font-serif text-xl font-bold text-barn">經典美式南方胡桃派</h3>
+              <span class="text-brick font-bold text-lg">NT$ 150</span>
+            </div>
+            <p class="text-stone-500 text-sm leading-relaxed mb-4">
+              經典南方感恩節配方，酥脆派皮填入滿滿烘烤香脆胡桃與楓糖黑糖內餡，搭配美式黑咖啡的絕佳首選。
+            </p>
+            <div class="flex items-center gap-2 text-xs text-stone-400">
+              <i class="fa-solid fa-cookie-bite text-wood"></i>
+              <span>深焙咖啡推薦佐餐</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- 線上預購與商品選購 -->
+  <section id="shop" class="py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex flex-col md:flex-row md:items-end justify-between mb-12">
+      <div>
+        <span class="text-brick font-serif font-bold text-sm tracking-widest uppercase">Order Online</span>
+        <h2 class="font-serif text-3xl sm:text-4xl font-bold text-barn mt-1">線上預購烘焙專區</h2>
+        <p class="text-stone-500 text-sm mt-2">支持黑貓低溫冷藏宅配直送到府或門市預約自取</p>
+      </div>
+      <!-- 分類標籤 -->
+      <div class="flex flex-wrap gap-2 mt-6 md:mt-0">
+        <button onclick="filterShop('all')" class="category-btn active px-4 py-2 rounded-full text-xs font-medium bg-brick text-white">全部商品</button>
+        <button onclick="filterShop('classic')" class="category-btn px-4 py-2 rounded-full text-xs font-medium bg-white text-stone-600 border border-stone-200 hover:border-brick">美式招牌</button>
+        <button onclick="filterShop('seasonal')" class="category-btn px-4 py-2 rounded-full text-xs font-medium bg-white text-stone-600 border border-stone-200 hover:border-brick">當季水果限定</button>
+      </div>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-      <!-- 肉桂捲卡片（已套用指定 GitHub 圖片路徑） -->
-      <div class="bg-white rounded-2xl overflow-hidden shadow-sm border border-stone-200 hover:shadow-md transition">
-        <div class="h-64 overflow-hidden relative">
-          <img src="https://lilly6319-food.github.io/sweets-web/cinnamon-roll.jpg.jpg" 
-               alt="美式老奶奶手工肉桂捲" 
-               class="w-full h-full object-cover transform hover:scale-105 transition duration-500">
-          <span class="absolute top-4 left-4 bg-brick text-white text-xs px-3 py-1 rounded-full font-medium shadow">人氣 No.1</span>
-        </div>
-        <div class="p-6">
-          <div class="flex justify-between items-baseline mb-2">
-            <h3 class="font-serif text-xl font-bold text-barn">美式老奶奶手工肉桂捲</h3>
-            <span class="text-brick font-bold text-lg">NT$ 120</span>
+    <!-- 商品網格 -->
+    <div id="productGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <!-- JavaScript 會動態渲染商品 -->
+    </div>
+  </section>
+
+  <!-- 外燴服務與場地租借 -->
+  <section id="catering" class="py-20 bg-warm border-t border-stone-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-2xl mx-auto mb-16">
+        <span class="text-brick font-serif font-bold text-sm tracking-widest uppercase">Events & Spaces</span>
+        <h2 class="font-serif text-3xl sm:text-4xl font-bold text-barn mt-1">客製外燴・美式穀倉場地租借</h2>
+        <p class="text-stone-600 text-sm mt-3">為您的商業活動、品牌發表、婚禮 Candy Bar 或攝影活動提供溫暖獨特的空間與美味甜點</p>
+        <div class="w-12 h-1 bg-brick mx-auto mt-4 rounded-full"></div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <!-- 外燴方案 -->
+        <div class="bg-white rounded-2xl p-8 border border-stone-200 shadow-sm flex flex-col justify-between">
+          <div>
+            <div class="w-12 h-12 rounded-xl bg-brick/10 text-brick flex items-center justify-center text-xl mb-4">
+              <i class="fa-solid fa-champagne-glasses"></i>
+            </div>
+            <h3 class="font-serif text-2xl font-bold text-barn mb-3">企業茶會與 Candy Bar 外燴</h3>
+            <p class="text-stone-600 text-sm leading-relaxed mb-6">
+              客製化迷你一口甜點塔、美式迷你肉桂捲、有機生菜水果小鹹派與精品冷萃咖啡桶，專人到場擺盤布置，滿足 20~100 人精緻聚會。
+            </p>
+            <ul class="space-y-2 text-stone-500 text-xs mb-8">
+              <li class="flex items-center gap-2"><i class="fa-solid fa-check text-brick"></i> 可客製品牌糖霜插卡與企業色彩搭配</li>
+              <li class="flex items-center gap-2"><i class="fa-solid fa-check text-brick"></i> 提供全程保溫保冷器皿與美式復古木箱展台</li>
+              <li class="flex items-center gap-2"><i class="fa-solid fa-check text-brick"></i> 台北市區滿額享專人免費運送至指定會場</li>
+            </ul>
           </div>
-          <p class="text-stone-500 text-sm leading-relaxed mb-4">
-            重現加州傳統配方，手工多層揉入香濃錫蘭肉桂粉與黑糖，出爐後淋上厚厚一層酸甜手打奶油乳酪霜，外酥內軟。
-          </p>
-          <div class="flex items-center gap-2 text-xs text-stone-400">
-            <i class="fa-solid fa-wheat-awn text-brick"></i>
-            <span>每日新鮮出爐・常溫或回烤皆宜</span>
+          <a href="#store" class="block text-center w-full py-3 bg-barn hover:bg-stone-800 text-white rounded-lg text-sm font-medium transition">洽詢外燴專案</a>
+        </div>
+
+        <!-- 場租方案 -->
+        <div class="bg-white rounded-2xl p-8 border border-stone-200 shadow-sm flex flex-col justify-between">
+          <div>
+            <div class="w-12 h-12 rounded-xl bg-wood/10 text-wood flex items-center justify-center text-xl mb-4">
+              <i class="fa-solid fa-camera-retro"></i>
+            </div>
+            <h3 class="font-serif text-2xl font-bold text-barn mb-3">美式復古穀倉包場・攝影租借</h3>
+            <p class="text-stone-600 text-sm leading-relaxed mb-6">
+              全店大片落地玻璃採光、挑高斑駁白牆、老紅磚牆及實木鐵椅，適合服飾商業拍攝、戲劇取景、手作工作坊或私人派對。
+            </p>
+            <ul class="space-y-2 text-stone-500 text-xs mb-8">
+              <li class="flex items-center gap-2"><i class="fa-solid fa-check text-wood"></i> 平日早晨/晚間攝影包場方案（每小時起租）</li>
+              <li class="flex items-center gap-2"><i class="fa-solid fa-check text-wood"></i> 全區可容納 35-40 位賓客座位</li>
+              <li class="flex items-center gap-2"><i class="fa-solid fa-check text-wood"></i> 免費提供百兆高速 Wi-Fi、專業音響投影設備</li>
+            </ul>
+          </div>
+          <a href="#store" class="block text-center w-full py-3 bg-brick hover:bg-brick-dark text-white rounded-lg text-sm font-medium transition">預約現場看場</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 門市資訊與聯絡我們 -->
+  <section id="store" class="py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+      <!-- 門市資訊 -->
+      <div>
+        <span class="text-brick font-serif font-bold text-sm tracking-widest uppercase">Visit Us</span>
+        <h2 class="font-serif text-3xl sm:text-4xl font-bold text-barn mt-1 mb-6">門市資訊與營業時間</h2>
+        <p class="text-stone-600 text-sm leading-relaxed mb-8">
+          歡迎隨時來到店裡坐坐，聞著剛出爐的肉桂香氣，曬著大片落地窗的陽光，喝一杯溫潤醇厚的美式小農拿鐵。
+        </p>
+
+        <div class="space-y-6 text-sm text-stone-700">
+          <div class="flex items-start gap-4">
+            <div class="w-10 h-10 rounded-lg bg-stone-100 flex items-center justify-center text-brick shrink-0 mt-1">
+              <i class="fa-solid fa-location-dot"></i>
+            </div>
+            <div>
+              <p class="font-bold text-barn">門市地址</p>
+              <p class="text-stone-500">台北市大安區忠孝東路四段 123 巷 45 號（近捷運忠孝敦化站 3 號出口）</p>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-4">
+            <div class="w-10 h-10 rounded-lg bg-stone-100 flex items-center justify-center text-brick shrink-0 mt-1">
+              <i class="fa-solid fa-clock"></i>
+            </div>
+            <div>
+              <p class="font-bold text-barn">營業時間</p>
+              <p class="text-stone-500">週二至週日 10:30 - 19:30（每週一公休進行烘焙研發）</p>
+              <p class="text-xs text-brick mt-0.5">每日手作甜點限量出爐，售完為止</p>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-4">
+            <div class="w-10 h-10 rounded-lg bg-stone-100 flex items-center justify-center text-brick shrink-0 mt-1">
+              <i class="fa-solid fa-phone"></i>
+            </div>
+            <div>
+              <p class="font-bold text-barn">聯絡電話</p>
+              <p class="text-stone-500">(02) 2711-8899</p>
+            </div>
           </div>
         </div>
       </div>
 
-      <!-- 芒果戚風蛋糕卡片 -->
-      <div class="bg-white rounded-2xl overflow-hidden shadow-sm border border-stone-200 hover:shadow-md transition">
-        <div class="h-64 overflow-hidden relative">
-          <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=800&q=80" 
-               alt="台南有機芒果美式戚風" 
-               class="w-full h-full object-cover transform hover:scale-105 transition duration-500">
-          <span class="absolute top-4 left-4 bg-amber-600 text-white text-xs px-3 py-1 rounded-full font-medium shadow">夏季限定</span>
-        </div>
-        <div class="p-6">
-          <div class="flex justify-between items-baseline mb-2">
-            <h3 class="font-serif text-xl font-bold text-barn">台南有機芒果美式戚風</h3>
-            <span class="text-brick font-bold text-lg">NT$ 180</span>
+      <!-- 快速聯絡表單 -->
+      <div class="bg-white p-8 rounded-2xl border border-stone-200 shadow-sm">
+        <h3 class="font-serif text-2xl font-bold text-barn mb-2">聯絡我們・客製諮詢</h3>
+        <p class="text-stone-500 text-xs mb-6">如有外燴、場租包場或大宗預購需求，請填寫表單，我們將於 24 小時內回覆您。</p>
+        
+        <form onsubmit="handleFormSubmit(event)" class="space-y-4">
+          <div>
+            <label class="block text-xs font-bold text-stone-700 mb-1">您的姓名</label>
+            <input type="text" required placeholder="例如：林小姐 / 薛先生" class="w-full px-4 py-2.5 rounded-lg border border-stone-200 text-sm focus:outline-none focus:border-brick">
           </div>
-          <p class="text-stone-500 text-sm leading-relaxed mb-4">
-            特選台南玉井在地自然熟成有機愛文芒果，搭配蓬鬆濕潤香草戚風蛋糕胚與小農無調整牧場動物性鮮奶油，清爽果香甜而不膩。
-          </p>
-          <div class="flex items-center gap-2 text-xs text-stone-400">
-            <i class="fa-solid fa-lemon text-amber-500"></i>
-            <span>在地小農契作有機芒果合作</span>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-bold text-stone-700 mb-1">聯絡電話</label>
+              <input type="tel" required placeholder="0912-345-678" class="w-full px-4 py-2.5 rounded-lg border border-stone-200 text-sm focus:outline-none focus:border-brick">
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-stone-700 mb-1">諮詢項目</label>
+              <select class="w-full px-4 py-2.5 rounded-lg border border-stone-200 text-sm focus:outline-none focus:border-brick text-stone-700">
+                <option>外燴服務諮詢</option>
+                <option>場地租借 / 商業攝影</option>
+                <option>大宗企業送禮</option>
+                <option>其他問題</option>
+              </select>
+            </div>
           </div>
-        </div>
-      </div>
-
-      <!-- 美式胡桃派卡片 -->
-      <div class="bg-white rounded-2xl overflow-hidden shadow-sm border border-stone-200 hover:shadow-md transition">
-        <div class="h-64 overflow-hidden relative">
-          <img src="https://images.unsplash.com/photo-1535141192574-5d4897c13136?auto=format&fit=crop&w=800&q=80" 
-               alt="經典美式南方胡桃派" 
-               class="w-full h-full object-cover transform hover:scale-105 transition duration-500">
-        </div>
-        <div class="p-6">
-          <div class="flex justify-between items-baseline mb-2">
-            <h3 class="font-serif text-xl font-bold text-barn">經典美式南方胡桃派</h3>
-            <span class="text-brick font-bold text-lg">NT$ 150</span>
+          <div>
+            <label class="block text-xs font-bold text-stone-700 mb-1">諮詢內容與需求日期</label>
+            <textarea rows="4" required placeholder="請簡述您的活動人數、預算或需求..." class="w-full px-4 py-2.5 rounded-lg border border-stone-200 text-sm focus:outline-none focus:border-brick"></textarea>
           </div>
-          <p class="text-stone-500 text-sm leading-relaxed mb-4">
-            經典南方感恩節配方，酥脆派皮填入滿滿烘烤香脆胡桃與楓糖黑糖內餡，搭配美式黑咖啡的絕佳首選。
-          </p>
-          <div class="flex items-center gap-2 text-xs text-stone-400">
-            <i class="fa-solid fa-cookie-bite text-wood"></i>
-            <span>深焙咖啡推薦佐餐</span>
-          </div>
-        </div>
+          <button type="submit" class="w-full py-3 bg-brick hover:bg-brick-dark text-white rounded-lg text-sm font-medium shadow transition">
+            送出諮詢訊息
+          </button>
+        </form>
       </div>
     </div>
   </section>
 
   <!-- 頁尾 -->
   <footer class="bg-barn text-stone-400 py-12 border-t border-stone-800 text-center text-sm">
-    <p class="font-serif text-lg text-white mb-2">ABC Bakery & Cafe</p>
-    <p>© 2016-2026 ABC Bakery & Cafe. All rights reserved.</p>
+    <div class="max-w-7xl mx-auto px-4">
+      <p class="font-serif text-2xl text-white mb-2">ABC Bakery & Cafe</p>
+      <p class="text-xs text-stone-400 mb-4 tracking-widest uppercase">Authentic American Baking & Local Farm Ingredients</p>
+      <div class="flex justify-center gap-6 text-lg text-stone-400 mb-6">
+        <a href="#" class="hover:text-amber-100"><i class="fa-brands fa-instagram"></i></a>
+        <a href="#" class="hover:text-amber-100"><i class="fa-brands fa-facebook"></i></a>
+        <a href="#" class="hover:text-amber-100"><i class="fa-brands fa-line"></i></a>
+      </div>
+      <p class="text-xs text-stone-500">© 2016-2026 ABC Bakery & Cafe. All rights reserved.</p>
+    </div>
   </footer>
 
+  <!-- 購物車抽屜 (Offcanvas Cart) -->
+  <div id="cartModal" class="fixed inset-0 z-50 overflow-hidden hidden">
+    <div class="absolute inset-0 bg-black/50 backdrop-blur-sm transition-opacity" onclick="toggleCart()"></div>
+    <div class="fixed inset-y-0 right-0 max-w-full flex pl-10">
+      <div class="w-screen max-w-md bg-white shadow-2xl flex flex-col">
+        <div class="p-6 border-b border-stone-200 flex items-center justify-between bg-[#FAF7F2]">
+          <h2 class="font-serif text-xl font-bold text-barn flex items-center gap-2">
+            <i class="fa-solid fa-basket-shopping text-brick"></i> 線上購物車
+          </h2>
+          <button onclick="toggleCart()" class="text-stone-400 hover:text-stone-600">
+            <i class="fa-solid fa-xmark text-xl"></i>
+          </button>
+        </div>
+
+        <!-- 購物車清單 -->
+        <div id="cartItemsList" class="flex-1 overflow-y-auto p-6 space-y-4">
+          <!-- JS 動態填入 -->
+        </div>
+
+        <!-- 結帳小計區 -->
+        <div class="p-6 border-t border-stone-200 bg-stone-50 space-y-3">
+          <div class="flex justify-between text-sm text-stone-600">
+            <span>商品小計</span>
+            <span id="cartSubtotal" class="font-bold text-barn">NT$ 0</span>
+          </div>
+          <div class="flex justify-between text-sm text-stone-600">
+            <span>冷藏運費 (滿 NT$ 1500 免運)</span>
+            <span id="shippingFee" class="font-bold text-barn">NT$ 180</span>
+          </div>
+          <div class="border-t border-stone-200 pt-3 flex justify-between text-base font-bold text-barn">
+            <span>總計金額</span>
+            <span id="cartGrandTotal" class="text-brick text-xl font-bold">NT$ 0</span>
+          </div>
+          <button onclick="checkout()" class="w-full py-3.5 bg-brick hover:bg-brick-dark text-white rounded-lg font-medium shadow transition mt-2">
+            前往預約與結帳
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- JavaScript 邏輯 -->
+  <script>
+    // 預購商品清單
+    const products = [
+      {
+        id: 1,
+        name: "美式老奶奶手工肉桂捲 (4入)",
+        category: "classic",
+        price: 480,
+        image: "https://lilly6319-food.github.io/sweets-web/cinnamon-roll.jpg.jpg",
+        desc: "加州老配方，附獨立手打奶油乳酪糖霜盒"
+      },
+      {
+        id: 2,
+        name: "台南有機芒果美式戚風 (6吋)",
+        category: "seasonal",
+        price: 880,
+        image: "https://images.unsplash.com/photo-1565958011703-44f9829ba187?auto=format&fit=crop&w=800&q=80",
+        desc: "愛文芒果鮮果切塊＋小農生乳奶霜"
+      },
+      {
+        id: 3,
+        name: "美式南方經典胡桃派 (8吋)",
+        category: "classic",
+        price: 650,
+        image: "https://images.unsplash.com/photo-1621303837174-89787a7d4729?auto=format&fit=crop&w=800&q=80",
+        desc: "楓糖黑糖香脆烘烤胡桃，美式道地家常"
+      },
+      {
+        id: 4,
+        name: "小農香草水果鮮奶油蛋糕 (6吋)",
+        category: "seasonal",
+        price: 820,
+        image: "https://images.unsplash.com/photo-1535141192574-5d4897c13136?auto=format&fit=crop&w=800&q=80",
+        desc: "嚴選大湖鮮採草莓與小農濃郁乳酪"
+      }
+    ];
+
+    let cart = [];
+
+    // 渲染商品
+    function renderProducts(category = 'all') {
+      const grid = document.getElementById('productGrid');
+      grid.innerHTML = '';
+
+      const filtered = category === 'all' ? products : products.filter(p => p.category === category);
+
+      filtered.forEach(p => {
+        const card = document.createElement('div');
+        card.className = "bg-white rounded-2xl overflow-hidden border border-stone-200 shadow-sm hover:shadow-md transition flex flex-col justify-between";
+        card.innerHTML = `
+          <div>
+            <div class="h-48 overflow-hidden">
+              <img src="${p.image}" alt="${p.name}" class="w-full h-full object-cover transform hover:scale-105 transition duration-500">
+            </div>
+            <div class="p-5">
+              <h4 class="font-serif font-bold text-barn text-base mb-1">${p.name}</h4>
+              <p class="text-stone-500 text-xs mb-3 line-clamp-2">${p.desc}</p>
+              <div class="text-brick font-bold text-base">NT$ ${p.price}</div>
+            </div>
+          </div>
+          <div class="p-5 pt-0">
+            <button onclick="addToCart(${p.id})" class="w-full py-2 bg-stone-100 hover:bg-brick hover:text-white text-stone-700 text-xs font-semibold rounded-lg transition flex items-center justify-center gap-1.5">
+              <i class="fa-solid fa-plus text-[10px]"></i> 加入預購車
+            </button>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    // 分類過濾
+    function filterShop(cat) {
+      document.querySelectorAll('.category-btn').forEach(btn => {
+        btn.classList.remove('bg-brick', 'text-white');
+        btn.classList.add('bg-white', 'text-stone-600');
+      });
+      event.target.classList.remove('bg-white', 'text-stone-600');
+      event.target.classList.add('bg-brick', 'text-white');
+      renderProducts(cat);
+    }
+
+    // 購物車功能
+    function addToCart(productId) {
+      const item = products.find(p => p.id === productId);
+      const existing = cart.find(c => c.id === productId);
+      if (existing) {
+        existing.qty += 1;
+      } else {
+        cart.push({ ...item, qty: 1 });
+      }
+      updateCartUI();
+      toggleCart(true);
+    }
+
+    function changeQty(id, delta) {
+      const item = cart.find(c => c.id === id);
+      if (!item) return;
+      item.qty += delta;
+      if (item.qty <= 0) {
+        cart = cart.filter(c => c.id !== id);
+      }
+      updateCartUI();
+    }
+
+    function updateCartUI() {
+      const totalCount = cart.reduce((sum, item) => sum + item.qty, 0);
+      document.getElementById('cartCount').textContent = totalCount;
+
+      const list = document.getElementById('cartItemsList');
+      if (cart.length === 0) {
+        list.innerHTML = `
+          <div class="text-center py-12 text-stone-400">
+            <i class="fa-solid fa-basket-shopping text-4xl mb-3"></i>
+            <p class="text-sm">您的預購車目前是空的</p>
+          </div>
+        `;
+      } else {
+        list.innerHTML = cart.map(item => `
+          <div class="flex items-center gap-4 py-3 border-b border-stone-100">
+            <img src="${item.image}" alt="${item.name}" class="w-16 h-16 rounded-lg object-cover shrink-0">
+            <div class="flex-1 min-w-0">
+              <h5 class="font-bold text-sm text-barn truncate">${item.name}</h5>
+              <div class="text-xs text-brick font-medium mt-0.5">NT$ ${item.price}</div>
+              <div class="flex items-center gap-2 mt-2">
+                <button onclick="changeQty(${item.id}, -1)" class="w-6 h-6 rounded bg-stone-100 text-stone-600 text-xs flex items-center justify-center hover:bg-stone-200">-</button>
+                <span class="text-xs font-medium w-4 text-center">${item.qty}</span>
+                <button onclick="changeQty(${item.id}, 1)" class="w-6 h-6 rounded bg-stone-100 text-stone-600 text-xs flex items-center justify-center hover:bg-stone-200">+</button>
+              </div>
+            </div>
+            <div class="text-sm font-bold text-stone-800">
+              NT$ ${item.price * item.qty}
+            </div>
+          </div>
+        `).join('');
+      }
+
+      const subtotal = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
+      const shipping = subtotal >= 1500 || subtotal === 0 ? 0 : 180;
+      const grandTotal = subtotal + shipping;
+
+      document.getElementById('cartSubtotal').textContent = `NT$ ${subtotal}`;
+      document.getElementById('shippingFee').textContent = subtotal >= 1500 ? '免運費' : `NT$ ${shipping}`;
+      document.getElementById('cartGrandTotal').textContent = `NT$ ${grandTotal}`;
+    }
+
+    function toggleCart(forceOpen = false) {
+      const modal = document.getElementById('cartModal');
+      if (forceOpen) {
+        modal.classList.remove('hidden');
+      } else {
+        modal.classList.toggle('hidden');
+      }
+    }
+
+    function toggleMobileMenu() {
+      document.getElementById('mobileMenu').classList.toggle('hidden');
+    }
+
+    function handleFormSubmit(e) {
+      e.preventDefault();
+      alert('感謝您的諮詢！ABC Bakery & Cafe 團隊將於 24 小時內與您聯繫。');
+      e.target.reset();
+    }
+
+    function checkout() {
+      if (cart.length === 0) {
+        alert('請先選購商品再進行結帳！');
+        return;
+      }
+      alert('已收到您的預訂清單！系統將導向線上付款與取貨日期填寫頁面。');
+    }
+
+    // 初始化
+    renderProducts();
+  </script>
 </body>
 </html>
