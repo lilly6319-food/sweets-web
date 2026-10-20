@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ABC Bakery & Cafe | 美式復古烘焙・純粹手作</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,800;1,400&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brick: '#9E3D29',
+            'brick-dark': '#7A2E1E',
+            cream: '#FAF7F2',
+            barn: '#2B2625',
+            wood: '#5C4033',
+            'industrial-gray': '#4A4A4A'
+          },
+          fontFamily: {
+            serif: ['"Playfair Display"', 'serif'],
+            sans: ['"Noto Sans TC"', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      background-color: #FAF7F2;
+      color: #2B2625;
+      font-family: 'Noto Sans TC', sans-serif;
+    }
+    .hero-bg {
+      background-image: linear-gradient(rgba(20, 16, 15, 0.55), rgba(20, 16, 15, 0.7)), url('https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=1920&q=80');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+    }
+  </style>
+</head>
+<body class="relative min-h-screen">
+
+  <!-- 導覽列 -->
+  <header class="sticky top-0 z-40 bg-[#FAF7F2]/95 backdrop-blur border-b border-stone-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+      <a href="#" class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-full bg-brick text-white flex items-center justify-center font-serif text-xl font-bold shadow">
+          A
+        </div>
+        <div>
+          <span class="block font-serif text-xl font-bold tracking-wider text-barn">ABC Bakery & Cafe</span>
+          <span class="block text-[10px] tracking-widest text-brick uppercase -mt-1 font-medium">Est. Apr 2016</span>
+        </div>
+      </a>
+
+      <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-stone-700">
+        <a href="#about" class="hover:text-brick transition">關於我們</a>
+        <a href="#menu" class="hover:text-brick transition">特選菜單</a>
+        <a href="#shop" class="hover:text-brick transition">線上預購</a>
+        <a href="#catering" class="hover:text-brick transition">外燴與場租</a>
+        <a href="#store" class="hover:text-brick transition">門市資訊</a>
+      </nav>
+
+      <div class="flex items-center gap-4">
+        <a href="#shop" class="bg-brick hover:bg-brick-dark text-white px-4 py-2 rounded-lg text-sm font-medium shadow-sm transition">
+          立即點餐
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero 區塊 -->
+  <section class="hero-bg text-white py-32 px-4 sm:px-6 lg:px-8 text-center flex items-center justify-center min-h-[70vh]">
+    <div class="max-w-3xl mx-auto">
+      <span class="inline-block py-1 px-4 bg-brick/80 rounded-full text-xs font-semibold tracking-widest uppercase mb-4">美式穀倉風格甜點店</span>
+      <h1 class="font-serif text-4xl sm:text-6xl font-bold tracking-wide mb-6">美式經典，在地純粹</h1>
+      <p class="text-stone-200 text-base sm:text-lg leading-relaxed mb-8 font-light">
+        自 2016 年春天，我們以大片陽光、斑駁老紅磚與原木桌椅，重現記憶裡道地美式烘焙。結合台灣在地有機蔬果與鮮乳，為您獻上溫暖的手作香氣。
+      </p>
+      <div class="flex flex-wrap justify-center gap-4">
+        <a href="#shop" class="bg-brick hover:bg-brick-dark text-white px-8 py-3.5 rounded-lg text-base font-medium shadow transition">線上訂購手作甜點</a>
+        <a href="#menu" class="bg-white/10 hover:bg-white/20 border border-white/30 text-white px-8 py-3.5 rounded-lg text-base font-medium backdrop-blur transition">瀏覽店內菜單</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 嚴選餐點 / 菜單區塊 -->
+  <section id="menu" class="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center max-w-2xl mx-auto mb-16">
+      <span class="text-brick font-serif font-bold text-sm tracking-widest uppercase">Our Signature</span>
+      <h2 class="font-serif text-3xl sm:text-4xl font-bold text-barn mt-1">經典招牌甜點</h2>
+      <div class="w-12 h-1 bg-brick mx-auto mt-4 rounded-full"></div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <!-- 肉桂捲卡片（已套用指定 GitHub 圖片路徑） -->
+      <div class="bg-white rounded-2xl overflow-hidden shadow-sm border border-stone-200 hover:shadow-md transition">
+        <div class="h-64 overflow-hidden relative">
+          <img src="https://lilly6319-food.github.io/sweets-web/cinnamon-roll.jpg.jpg" 
+               alt="美式老奶奶手工肉桂捲" 
+               class="w-full h-full object-cover transform hover:scale-105 transition duration-500">
+          <span class="absolute top-4 left-4 bg-brick text-white text-xs px-3 py-1 rounded-full font-medium shadow">人氣 No.1</span>
+        </div>
+        <div class="p-6">
+          <div class="flex justify-between items-baseline mb-2">
+            <h3 class="font-serif text-xl font-bold text-barn">美式老奶奶手工肉桂捲</h3>
+            <span class="text-brick font-bold text-lg">NT$ 120</span>
+          </div>
+          <p class="text-stone-500 text-sm leading-relaxed mb-4">
+            重現加州傳統配方，手工多層揉入香濃錫蘭肉桂粉與黑糖，出爐後淋上厚厚一層酸甜手打奶油乳酪霜，外酥內軟。
+          </p>
+          <div class="flex items-center gap-2 text-xs text-stone-400">
+            <i class="fa-solid fa-wheat-awn text-brick"></i>
+            <span>每日新鮮出爐・常溫或回烤皆宜</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 芒果戚風蛋糕卡片 -->
+      <div class="bg-white rounded-2xl overflow-hidden shadow-sm border border-stone-200 hover:shadow-md transition">
+        <div class="h-64 overflow-hidden relative">
+          <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=800&q=80" 
+               alt="台南有機芒果美式戚風" 
+               class="w-full h-full object-cover transform hover:scale-105 transition duration-500">
+          <span class="absolute top-4 left-4 bg-amber-600 text-white text-xs px-3 py-1 rounded-full font-medium shadow">夏季限定</span>
+        </div>
+        <div class="p-6">
+          <div class="flex justify-between items-baseline mb-2">
+            <h3 class="font-serif text-xl font-bold text-barn">台南有機芒果美式戚風</h3>
+            <span class="text-brick font-bold text-lg">NT$ 180</span>
+          </div>
+          <p class="text-stone-500 text-sm leading-relaxed mb-4">
+            特選台南玉井在地自然熟成有機愛文芒果，搭配蓬鬆濕潤香草戚風蛋糕胚與小農無調整牧場動物性鮮奶油，清爽果香甜而不膩。
+          </p>
+          <div class="flex items-center gap-2 text-xs text-stone-400">
+            <i class="fa-solid fa-lemon text-amber-500"></i>
+            <span>在地小農契作有機芒果合作</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 美式胡桃派卡片 -->
+      <div class="bg-white rounded-2xl overflow-hidden shadow-sm border border-stone-200 hover:shadow-md transition">
+        <div class="h-64 overflow-hidden relative">
+          <img src="https://images.unsplash.com/photo-1535141192574-5d4897c13136?auto=format&fit=crop&w=800&q=80" 
+               alt="經典美式南方胡桃派" 
+               class="w-full h-full object-cover transform hover:scale-105 transition duration-500">
+        </div>
+        <div class="p-6">
+          <div class="flex justify-between items-baseline mb-2">
+            <h3 class="font-serif text-xl font-bold text-barn">經典美式南方胡桃派</h3>
+            <span class="text-brick font-bold text-lg">NT$ 150</span>
+          </div>
+          <p class="text-stone-500 text-sm leading-relaxed mb-4">
+            經典南方感恩節配方，酥脆派皮填入滿滿烘烤香脆胡桃與楓糖黑糖內餡，搭配美式黑咖啡的絕佳首選。
+          </p>
+          <div class="flex items-center gap-2 text-xs text-stone-400">
+            <i class="fa-solid fa-cookie-bite text-wood"></i>
+            <span>深焙咖啡推薦佐餐</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 頁尾 -->
+  <footer class="bg-barn text-stone-400 py-12 border-t border-stone-800 text-center text-sm">
+    <p class="font-serif text-lg text-white mb-2">ABC Bakery & Cafe</p>
+    <p>© 2016-2026 ABC Bakery & Cafe. All rights reserved.</p>
+  </footer>
+
+</body>
+</html>
