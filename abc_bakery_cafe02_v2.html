@@ -1170,19 +1170,94 @@
       checkoutModal.classList.add('hidden');
     });
 
-    document.getElementById('order-submit-form').addEventListener('submit', (e) => {
+    // Public browser key; database permissions allow INSERT only.
+    const databaseUrl = 'https://ogjdjtgsympgnzvtvdri.supabase.co';
+    const databaseKey = 'sb_publishable_tVIps2VjkMbSOvBVJgvR2g_WdNhGIfg';
+
+    async function saveSubmission(table, payload) {
+      const response = await fetch(`${databaseUrl}/rest/v1/${table}`, {
+        method: 'POST',
+        headers: { apikey: databaseKey, 'Content-Type': 'application/json', Prefer: 'return=minimal' },
+        body: JSON.stringify(payload)
+      });
+      if (!response.ok) throw new Error(`Submission failed (${response.status})`);
+    }
+
+    async function submitForm(form, table, payload, onSuccess) {
+      if (form.dataset.sending === 'true') return;
+      const button = form.querySelector('button[type="submit"]');
+      const original = button.innerHTML;
+      let status = form.querySelector('[role="status"]');
+      if (!status) {
+        status = document.createElement('p');
+        status.setAttribute('role', 'status');
+        status.className = 'text-sm text-stone-700';
+        button.before(status);
+      }
+      form.dataset.sending = 'true';
+      button.disabled = true;
+      button.textContent = '資料送出中…';
+      status.textContent = '正在儲存，請稍候。';
+      try {
+        await saveSubmission(table, payload);
+        status.textContent = '已成功送出，我們將由專人與您聯絡。';
+        onSuccess();
+      } catch (error) {
+        console.error(error);
+        status.textContent = '尚未確認送出成功，您填寫的資料已保留。請稍後重試；若網路中斷，請先聯絡店家確認以免重複送出。';
+      } finally {
+        form.dataset.sending = 'false';
+        button.disabled = false;
+        button.innerHTML = original;
+      }
+    }
+
+    const orderForm = document.getElementById('order-submit-form');
+    const orderFields = orderForm.querySelectorAll('input');
+    ['customer_name', 'phone', 'delivery_details'].forEach((name, i) => {
+      orderFields[i].name = name;
+      orderFields[i].maxLength = [100, 40, 500][i];
+      orderFields[i].pattern = '.*\\S.*';
+    });
+    orderForm.addEventListener('submit', (e) => {
       e.preventDefault();
-      checkoutModal.classList.add('hidden');
-      cart = [];
-      updateCartUI();
-      showToast('🎉 預購申請已送出！烘焙團隊將盡速為您排程。');
+      if (!cart.length) { showToast('請先加入預購商品。'); return; }
+      const deliveryMode = document.querySelector('input[name="delivery-mode"]:checked')?.value || 'delivery';
+      const items = cart.map(item => ({ product_id: item.id, name: item.name, unit_price: item.price, quantity: item.qty }));
+      const subtotal = items.reduce((sum, item) => sum + item.unit_price * item.quantity, 0);
+      const shipping = deliveryMode === 'delivery' && subtotal < 2000 ? 160 : 0;
+      const payload = {
+        customer_name: orderFields[0].value.trim(), phone: orderFields[1].value.trim(),
+        delivery_details: orderFields[2].value.trim(), delivery_mode: deliveryMode,
+        payment_method: orderForm.querySelector('select').value, items,
+        estimated_subtotal: subtotal, estimated_shipping: shipping, estimated_total: subtotal + shipping
+      };
+      submitForm(orderForm, 'preorders', payload, () => {
+        checkoutModal.classList.add('hidden');
+        // Remove only submitted quantities if the cart changed while saving.
+        cart = cart.map(item => ({ ...item, qty: item.qty - (items.find(sent => sent.product_id === item.id)?.quantity || 0) })).filter(item => item.qty > 0);
+        updateCartUI();
+        orderForm.reset();
+        showToast('🎉 預購申請已儲存！專人將聯絡確認金額與付款。');
+      });
     });
 
-    // 聯絡我們表單送出
-    document.getElementById('contact-form').addEventListener('submit', (e) => {
+    const contactForm = document.getElementById('contact-form');
+    [['c-name', 100], ['c-phone', 40], ['c-email', 254], ['c-message', 5000]].forEach(([id, max]) => {
+      document.getElementById(id).maxLength = max;
+    });
+    contactForm.addEventListener('submit', (e) => {
       e.preventDefault();
-      showToast('感謝您的來信諮詢！我們將於24小時內致電回覆。');
-      e.target.reset();
+      const value = id => document.getElementById(id).value.trim();
+      const payload = { name: value('c-name'), phone: value('c-phone'), email: value('c-email'),
+        inquiry_type: document.getElementById('c-type').selectedOptions[0].textContent, message: value('c-message') };
+      if (!payload.name || !payload.phone || !payload.message) {
+        showToast('請填寫姓名、電話與需求內容。'); return;
+      }
+      submitForm(contactForm, 'contact_requests', payload, () => {
+        contactForm.reset();
+        showToast('感謝您的來信！諮詢已儲存，我們將於24小時內回覆。');
+      });
     });
 
     // 手機版選單切換
